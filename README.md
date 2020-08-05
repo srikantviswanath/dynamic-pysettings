@@ -41,9 +41,3 @@ if __name__ == '__main__':
     with mysettings(env):
         run(env)
 ```
-
-## What is the interface caveat?
-
-
-
-In the `__init__.py` of the settings folder, 
