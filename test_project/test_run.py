@@ -1,5 +1,5 @@
 import unittest
-from ..settings import
+from test_project.settings import test_project_settings
 
 
 class TestDynamicPySettingsAsClient(unittest.TestCase):
