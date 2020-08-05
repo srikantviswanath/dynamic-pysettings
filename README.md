@@ -41,3 +41,7 @@ if __name__ == '__main__':
     with mysettings(env):
         run(env)
 ```
+
+## Tests
+Run the tests at `test_project.test_run.py` and `another_project_with_nested_settings.test_settings.py`
+to understand the usage better
