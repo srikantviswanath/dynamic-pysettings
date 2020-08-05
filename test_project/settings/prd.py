@@ -1,0 +1,1 @@
+downstream_host = 'https://thanos.com'
