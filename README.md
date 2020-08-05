@@ -4,6 +4,16 @@ manager + decorator interface. The usage of the interface is similar to django's
 however this comes without the "heavy" framework setup of django.
 
 ## How do I wire up?
+Let's say you have a project setup like so:
+```
+myproject
+    |----settings
+        |----__init__.py
+        |----dev.py
+        |----tst.py
+    |----run.py
+   
+```
 In the settings folder of your project, you need to have different `.py` files each corresponding to 
 your environments e.g., `dev.py`, `tst.py` etc (much like django).
 
@@ -18,6 +28,7 @@ mysettings = PySettings(__path__)
 ## How to use it?
 This works when you have a settings folder **anywhere** nested in your root project
 ```python
+"""run.py"""
 from myproject.settings import mysettings
 import os
 
