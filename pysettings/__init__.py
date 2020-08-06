@@ -24,15 +24,25 @@ class SettingsManager(object):
 
     def __init__(self, env, settings_path, settings_instance):
         self.env = env
-        self.settings_path = settings_path
+        self.settings_path = settings_path[0] if isinstance(settings_path, (list, tuple)) else settings_path
         self.settings_instance = settings_instance
         self.settings_module = None
         self.settings_vars_dict = {}
 
-    def import_settings(self, path, env):
-        settings_module_path = f"{path[0].split('/')[-1]}.{env}"
-        self.settings_module = __import__(settings_module_path, fromlist=env)
-        self.settings_vars_dict = self.settings_module.__dict__
+    def _recursive_import(self, path, env):
+        if not path:
+            ValueError(f'Settings path cannot be an empty value. {path} given')
+        chunks = path.split('/')
+        index_from_right = -1
+        while abs(index_from_right) <= len(chunks):
+            subpath = '.'.join(chunks[index_from_right:])
+            try:
+                self.settings_module = __import__(f'{subpath}.{env}', fromlist=env)
+                self.settings_vars_dict = self.settings_module.__dict__
+                return
+            except ModuleNotFoundError:
+                index_from_right -= 1
+        raise ImportError(f'Could not import any relative settings package from {path}')
 
     def settings_on(self, vars_dict):
         for k, v in vars_dict.items():
@@ -43,7 +53,7 @@ class SettingsManager(object):
             self.settings_instance.__dict__.pop(k)
 
     def __enter__(self):
-        self.import_settings(self.settings_path, self.env)
+        self._recursive_import(self.settings_path, self.env)
         self.settings_on(self.settings_vars_dict)
 
     def __exit__(self, exc_type, exc_val, exc_tb):
